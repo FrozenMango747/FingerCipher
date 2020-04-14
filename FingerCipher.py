@@ -1,4 +1,4 @@
-table = [chr(i) for i in range(97, 123)] + [chr(i) for i in range(65, 91)] + [chr(i) for i in range(48, 58)] + [i for i
+deftable = [chr(i) for i in range(97, 123)] + [chr(i) for i in range(65, 91)] + [chr(i) for i in range(48, 58)] + [i for i
                                                                                                                 in
                                                                                                                 '.,’”!?/\ []{}()+-=_*~`><|$&@#^%∆√\t\n:;≠']
 
@@ -19,17 +19,17 @@ def texorSUB(a, b):
     # computes 10x+y
 
 
-def nums(string):
+def nums(string,table):
     '''converts a string to numbers by referencing the encryption table'''
     return [table.index(i) for i in string]
 
 
-def letters(numlist):
+def letters(numlist,table):
     '''converts a list of numbers to a list of chars by referencing table above'''
     return [table[num] for num in numlist]
 
 
-def encrypt(pt, key):
+def encrypt(pt, key,table):
     '''encrypts a string pt with a key of any length'''
     if len(pt) > len(key):  # if using keyword
         keyphrase = [key[i % len(key)] for i in range(len(pt))]  # repeat key as needed
@@ -38,14 +38,14 @@ def encrypt(pt, key):
     else:
         keyphrase = key
 
-    pt = nums(pt)  # convert to numbers that we can texor
-    keyphrase = nums(keyphrase)
+    pt = nums(pt,table)  # convert to numbers that we can texor
+    keyphrase = nums(keyphrase,table)
     ct = [texor(pt[i], keyphrase[i]) for i in range(len(pt))]  # zip up the two lists into one using texor
 
-    return ''.join(letters(ct))  # we don't really want a list of numbers, so join it after converting to chars
+    return ''.join(letters(ct,table))  # we don't really want a list of numbers, so join it after converting to chars
 
 
-def decrypt(pt, key):
+def decrypt(pt, key,table):
     '''encrypts a string pt with a key of any length'''
     if len(pt) > len(key):  # if using keyword
         keyphrase = [key[i % len(key)] for i in range(len(pt))]  # repeat key as needed
@@ -54,15 +54,10 @@ def decrypt(pt, key):
     else:
         keyphrase = key
 
-    pt = nums(pt)  # convert to numbers that we can texor
-    keyphrase = nums(keyphrase)
+    pt = nums(pt,table)  # convert to numbers that we can texor
+    keyphrase = nums(keyphrase,table)
     ct = [texorSUB(pt[i], keyphrase[i]) for i in range(len(pt))]  # zip up the two lists into one using texor
 
-    return ''.join(letters(ct))  # we don't really want a list of numbers, so join it after converting to chars
+    return ''.join(letters(ct,table))  # we don't really want a list of numbers, so join it after converting to chars
 
-
-print(encrypt("Wow the weather sure is nice", "598uwea;.oq["))
-print(decrypt('	(~#Fbe/>sq_2”+#Eyr%GmyP8\.y', "598uwea;.oq[" ))
-print(len("598uwea;.oq["))
-enc = '	(~#Fbe/>sq_2”+#Eyr%GmyP8\.y'
-print(decrypt(enc[:12],enc[12:]))
+print(''.join(deftable))
